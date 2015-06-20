@@ -3,22 +3,42 @@ package com.example.camp_exam_webbrowser;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.KeyEvent;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.View.OnKeyListener;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 public class MainActivity extends ActionBarActivity {
 
 	private EditText textUrl;
 	private WebView webView;
+	private Button backButton, forwardButton;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+
+		backButton = (Button) findViewById(R.id.back);
+		backButton.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				if (webView.canGoBack()) {
+					webView.goBack();
+				} else {
+					Toast.makeText(MainActivity.this, "맨 뒷페이지 입니다.",
+							Toast.LENGTH_SHORT).show();
+				}
+			}
+		});
+		forwardButton = (Button) findViewById(R.id.forward);
 
 		textUrl = (EditText) findViewById(R.id.text_url);
 		textUrl.setText("http://google.com");
@@ -54,6 +74,22 @@ public class MainActivity extends ActionBarActivity {
 		webView.setWebViewClient(new WebViewClient());
 	}
 
+	public void goForward(View view) {
+		if (webView.canGoForward()) {
+			webView.goForward();
+		} else {
+			Toast.makeText(MainActivity.this, "맨 앞페이지 입니다.", Toast.LENGTH_SHORT)
+					.show();
+		}
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		// Inflate the menu; this adds items to the action bar if it is present.
+		getMenuInflater().inflate(R.menu.main, menu);
+		return true;
+	}
+
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		// Handle action bar item clicks here. The action bar will
@@ -63,6 +99,7 @@ public class MainActivity extends ActionBarActivity {
 		if (id == R.id.action_settings) {
 			return true;
 		}
+
 		return super.onOptionsItemSelected(item);
 	}
 }
